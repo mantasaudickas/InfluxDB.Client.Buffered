@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -7,13 +7,9 @@
 
 
   <ItemGroup>
+    <PackageReference Include="InfluxDB.Client.Buffered.Extensions" Version="1.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\InfluxDB.Client.Buffered.Extensions\InfluxDB.Client.Buffered.Extensions.csproj" />
   </ItemGroup>
 
 </Project>
