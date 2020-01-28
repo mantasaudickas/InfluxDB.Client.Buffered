@@ -13,7 +13,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\InfluxDB.Client.Buffered.Extensions\InfluxDB.Client.Buffered.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\InfluxDB.Client.Buffered.Extensions\InfluxDB.Client.Buffered.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

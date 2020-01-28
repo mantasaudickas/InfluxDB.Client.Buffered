@@ -27,11 +27,16 @@ namespace InfluxDB.Client.Buffered.AspNetCore
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services
-                .AddInfluxDbBufferedWriter("http://127.0.0.1:9999",
-                    "ULwlynldz_berRpD6UTcxKTcICRMq78ghwFkJDETezS0z3GcBuu_4kPu6LIpdKXyRHUHCNwTaCAFxw32UnXOFA==",
-                    "local",
-                    "7d835bff483311f6");
+            var influxDbOptions = InfluxDBClientOptions.Builder
+                .CreateNew()
+                .Url("http://127.0.0.1:9999")
+                .AuthenticateToken("ULwlynldz_berRpD6UTcxKTcICRMq78ghwFkJDETezS0z3GcBuu_4kPu6LIpdKXyRHUHCNwTaCAFxw32UnXOFA==".ToCharArray())
+                .Bucket("local")
+                .Org("7d835bff483311f6")
+                .AddDefaultTag("service", "api")
+                .Build();
+
+            services.AddInfluxDbBufferedWriter(influxDbOptions);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
