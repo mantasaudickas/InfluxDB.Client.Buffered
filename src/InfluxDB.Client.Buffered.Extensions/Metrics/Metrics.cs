@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Threading;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 
@@ -15,6 +16,7 @@ namespace InfluxDB.Client.Buffered.Extensions.Metrics
     public class DefaultMetrics: IDefaultMetrics
     {
         private static readonly string MachineName = Dns.GetHostName();
+        private static long _cpuTotal;
 
         private readonly IInfluxDbClientWriter _writer;
         private readonly Process _process;
@@ -49,6 +51,9 @@ namespace InfluxDB.Client.Buffered.Extensions.Metrics
             {
                 _process.Refresh();
 
+                var totalProcessorTime = (long) _process.TotalProcessorTime.TotalSeconds;
+                Interlocked.Add(ref _cpuTotal, Math.Max(0, totalProcessorTime - _cpuTotal));
+
                 var points = new[]
                 {
                     PointData
@@ -69,7 +74,11 @@ namespace InfluxDB.Client.Buffered.Extensions.Metrics
                         .Timestamp(now, WritePrecision.Ns),
                     PointData
                         .Measurement("process").Tag("host", MachineName)
-                        .Field("cpuTotal", _process.TotalProcessorTime.TotalSeconds)
+                        .Field("totalProcessorTime", totalProcessorTime)
+                        .Timestamp(now, WritePrecision.Ns),
+                    PointData
+                        .Measurement("process").Tag("host", MachineName)
+                        .Field("cpuTotal", totalProcessorTime)
                         .Timestamp(now, WritePrecision.Ns),
                     PointData
                         .Measurement("process").Tag("host", MachineName)
