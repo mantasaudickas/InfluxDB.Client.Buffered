@@ -31,7 +31,6 @@ namespace InfluxDB.Client.Buffered.Extensions.Middleware
                 int statusCode = response?.StatusCode ?? 0;
 
                 metrics.PushRequestDuration(method, requestPath, statusCode, timer.Elapsed);
-                metrics.PushProcessMetrics();
             }
         }
     }

@@ -2,6 +2,7 @@
 using Buffered.Channel;
 using InfluxDB.Client.Buffered.Extensions.Metrics;
 using InfluxDB.Client.Buffered.Extensions.Middleware;
+using InfluxDB.Client.Buffered.Extensions.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -43,6 +44,18 @@ namespace InfluxDB.Client.Buffered.Extensions
                     var client = InfluxDBClientFactory.Create(clientOptions);
                     return new InfluxDbClientWriter(client, options);
                 });
+        }
+
+        public static IServiceCollection AddInfluxDbProcessMetrics(this IServiceCollection services, ProcessMetricsOptions options)
+        {
+            if (options == null)
+            {
+                options = new ProcessMetricsOptions();
+            }
+
+            return services
+                .AddSingleton(p => options)
+                .AddHostedService<ProcessMetricsHostedService>();
         }
 
         public static IApplicationBuilder UseHttpMetrics(this IApplicationBuilder app)
